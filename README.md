@@ -48,17 +48,29 @@
 > - Windows：スタートメニューで「PowerShell」を検索して開く
 > - VS Code を使っているなら、メニューの「ターミナル」→「新しいターミナル」でも OK（おすすめ）
 
-### 1-2. このフォルダに移動する
+### 1-2. このプロジェクトをダウンロードする（最初の1回だけ）
+
+どちらか好きな方法で：
+
+- **かんたん**：https://github.com/zenshiken1/aframe-supermarket-log を開き、
+  緑の **「Code」** ボタン →「**Download ZIP**」→ ダウンロードした ZIP をダブルクリックして解凍
+  （フォルダ名は `aframe-supermarket-log-main` になります）
+- **Git を使う**（Git が入っている人）：ターミナルで
+  ```bash
+  git clone https://github.com/zenshiken1/aframe-supermarket-log.git
+  ```
+
+### 1-3. このフォルダに移動する
 
 ターミナルで `cd`（change directory ＝ フォルダを移動する命令）を使います。
 
 ```bash
-cd このフォルダの場所/supermarket-game
+cd このフォルダの場所/aframe-supermarket-log    （ZIP の場合は aframe-supermarket-log-main）
 ```
 
 > 💡 Mac なら `cd `（cd とスペース）まで打ってから、Finder でこのフォルダをターミナルにドラッグ＆ドロップすると、場所が自動で入ります。
 
-### 1-3. 必要なライブラリをインストールする（最初の1回だけ）
+### 1-4. 必要なライブラリをインストールする（最初の1回だけ）
 
 ```bash
 npm install
@@ -66,7 +78,7 @@ npm install
 
 `node_modules` というフォルダができれば成功です（中身は気にしなくて大丈夫）。
 
-### 1-4. サーバーを起動する
+### 1-5. サーバーを起動する
 
 ```bash
 npm start
@@ -79,11 +91,11 @@ npm start
 止めるときは Ctrl + C
 ```
 
-### 1-5. ブラウザで開く
+### 1-6. ブラウザで開く
 
 Chrome で **http://localhost:3000** を開きます。ゲームのスタート画面が出れば OK！
 
-### 1-6. 終わるとき
+### 1-7. 終わるとき
 
 ターミナルで **`Ctrl + C`** を押すとサーバーが止まります。
 
@@ -126,7 +138,7 @@ Chrome で **http://localhost:3000** を開きます。ゲームのスタート�
 ## 📁 3. フォルダとファイルの説明
 
 ```
-supermarket-game/
+aframe-supermarket-log/
 ├── package.json        ← このプロジェクトの設定（使うライブラリ、npm のコマンド）
 ├── package-lock.json   ← 自動で作られるファイル。触らなくて OK
 ├── server.js           ← ★ Node.js のサーバー（画面を配る＋ログを保存する）
