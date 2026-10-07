@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>スーパーで買い物ゲーム</title>
+  <link rel="icon" href="data:,">  <!-- ファビコン無し（404 エラーを出さないため） -->
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="js/collision.js"></script>
+  <script src="js/face-camera.js"></script>
+  <script src="js/update-mouse-ray.js"></script>
+  <style>
+    body { margin: 0; font-family: sans-serif; }
+
+    /* 画面左上の買い物リストとカゴ */
+    #ui {
+      position: fixed; top: 12px; left: 12px; z-index: 10;
+      background: rgba(255, 255, 255, 0.9); padding: 12px 16px;
+      border-radius: 8px; min-width: 180px;
+    }
+    #ui h2 { margin: 0 0 8px; font-size: 18px; }
+    #ui h3 { margin: 12px 0 4px; font-size: 15px; }
+    #shopping-list, #basket { margin: 0; padding-left: 20px; }
+    #quit-btn { margin-top: 12px; }
+
+    /* マウスを乗せた商品の名前 */
+    #tooltip {
+      position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+      z-index: 10; background: rgba(0, 0, 0, 0.7); color: #fff;
+      padding: 6px 14px; border-radius: 6px; display: none;
+    }
+
+    /* 「カゴに入れた」などのメッセージ */
+    #message {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      z-index: 10; font-size: 20px; font-weight: bold;
+    }
+
+    /* スタート画面・終了画面 */
+    .overlay {
+      position: fixed; inset: 0; z-index: 20;
+      background: rgba(0, 0, 0, 0.6); color: #fff;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+    }
+    .overlay input { font-size: 18px; padding: 6px 10px; margin-top: 8px; }
+    .overlay button { font-size: 20px; padding: 10px 30px; margin-top: 16px; cursor: pointer; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <!-- スタート画面 -->
+  <div id="start-screen" class="overlay">
+    <h1>スーパーで買い物ゲーム</h1>
+    <p>WASD / 矢印キーで移動、マウスドラッグで見回し<br>
+       買い物リストの商品をクリックしてカゴに入れよう<br>
+       買い終わったら <b>レジ</b> をクリックしてお会計</p>
+    <!-- 名前（実験の参加者ID）。ログの playerId に入る -->
+    <input id="player-id" type="text" placeholder="名前（なくてもOK）">
+    <button id="start-btn">スタート</button>
+  </div>
+
+  <!-- 終了画面 -->
+  <div id="end-screen" class="overlay hidden">
+    <h1 id="end-title"></h1>
+    <p id="end-text"></p>
+    <p id="save-text">ログを保存中...</p>
+    <button id="retry-btn">もう一度</button>
+  </div>
+
+  <!-- 買い物リストとカゴ -->
+  <!-- 時間は画面に出さない（急がせないため。ログには記録される） -->
+  <div id="ui" class="hidden">
+    <h2>買い物リスト</h2>
+    <ul id="shopping-list"></ul>
+    <h3>カゴの中</h3>
+    <ul id="basket"></ul>
+    <button id="quit-btn">中断してログ保存</button>
+  </div>
+
+  <div id="tooltip"></div>
+  <div id="message"></div>
+
+  <!-- A-Frame のシーン -->
+  <!-- cursor="rayOrigin: mouse" でマウスクリックで物を選べるようにする -->
+  <!-- update-mouse-ray は歩いたときにもマウスの光線を更新する（update-mouse-ray.js） -->
+  <!-- 光線が届く距離（raycaster の far）は game.js の CLICK_RANGE で設定している -->
+  <a-scene cursor="rayOrigin: mouse" raycaster="objects: .clickable" update-mouse-ray background="color: #dfe9f3">
+
+    <!-- プレイヤー（カメラ）。高さ 1.6m、WASD で移動 -->
+    <!-- acceleration で歩く速さが決まる。7 で約 1.2 m/s（人が普通に歩く速さ） -->
+    <!-- collision は collision.js で作った当たり判定（wasd-controls より後に書くこと） -->
+    <a-entity id="player" camera look-controls wasd-controls="acceleration: 7" collision position="0 1.6 8"></a-entity>
+
+    <!-- 照明 -->
+    <a-entity light="type: ambient; intensity: 0.7"></a-entity>
+    <a-entity light="type: directional; intensity: 0.6" position="2 6 4"></a-entity>
+
+    <!-- 床と壁（20m × 20m の店内） -->
+    <a-plane rotation="-90 0 0" width="20" height="20" color="#f2f2f2"></a-plane>
+    <a-box position="0 2 -10" width="20" height="4" depth="0.2" color="#fbe8c8"></a-box>
+    <a-box position="0 2 10"  width="20" height="4" depth="0.2" color="#fbe8c8"></a-box>
+    <a-box position="-10 2 0" width="0.2" height="4" depth="20" color="#fbe8c8"></a-box>
+    <a-box position="10 2 0"  width="0.2" height="4" depth="20" color="#fbe8c8"></a-box>
+
+    <!-- 商品棚・商品・レジは game.js で自動生成する -->
+    <a-entity id="store"></a-entity>
+  </a-scene>
+
+  <script src="js/logger.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

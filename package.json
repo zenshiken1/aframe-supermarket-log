@@ -1,0 +1,17 @@
+{
+  "name": "supermarket-game",
+  "version": "1.0.0",
+  "description": "A-Frame のスーパーで買い物リストの商品を集めるゲーム（行動ログ記録つき）",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "font": "node font-tools/make-font.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "msdf-bmfont-xml": "^2.8.0"
+  }
+}
